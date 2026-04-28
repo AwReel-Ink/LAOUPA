@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#2d6a4f" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="LAOUPA" />
+  <title>LAOUPA</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-theme="nature">
+
+  <!-- ========== SPLASH SCREEN ========== -->
+  <div id="splash-screen">
+    <div class="splash-content">
+      <div class="splash-logo">🌿</div>
+      <h1 class="splash-title">LAOUPA</h1>
+      <p class="splash-sub">Là ou pas là ?</p>
+      <div class="splash-loader"><div></div></div>
+    </div>
+  </div>
+
+  <!-- ========== APP WRAPPER ========== -->
+  <div id="app" class="hidden">
+
+    <!-- BANDEAU NOTIFICATIONS -->
+    <header id="notif-banner">
+      <div id="notif-cards-wrapper">
+        <div id="notif-cards" class="notif-cards"></div>
+      </div>
+    </header>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main id="main-content">
+
+      <!-- ===== ONGLET TABLEAU DE BORD ===== -->
+      <section id="tab-dashboard" class="tab-content active">
+
+        <!-- Zone Événements Pro -->
+        <div class="section-block" id="block-events">
+          <div class="section-header">
+            <span class="section-icon">⚡</span>
+            <h2 class="section-title">Événements Professionnels</h2>
+            <span class="section-badge" id="badge-events">0</span>
+          </div>
+          <div class="cards-list" id="list-events">
+            <div class="empty-state" id="empty-events">
+              <span class="empty-icon">📋</span>
+              <p>Aucun événement en cours</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Zone RDV Travailleurs -->
+        <div class="section-block" id="block-rdv">
+          <div class="section-header">
+            <span class="section-icon">👷</span>
+            <h2 class="section-title">RDV &amp; Absences</h2>
+            <span class="section-badge" id="badge-rdv">0</span>
+          </div>
+          <div class="cards-list" id="list-rdv">
+            <div class="empty-state" id="empty-rdv">
+              <span class="empty-icon">📅</span>
+              <p>Aucun RDV à venir</p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ===== ONGLET HISTORIQUE ===== -->
+      <section id="tab-history" class="tab-content">
+
+        <div class="section-block" id="block-hist-events">
+          <div class="section-header">
+            <span class="section-icon">⚡</span>
+            <h2 class="section-title">Événements Traités</h2>
+            <span class="section-badge" id="badge-hist-events">0</span>
+            <span class="section-sub">Suppression auto après 24h</span>
+          </div>
+          <div class="cards-list" id="list-hist-events">
+            <div class="empty-state" id="empty-hist-events">
+              <span class="empty-icon">✅</span>
+              <p>Aucun événement traité</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-block" id="block-hist-rdv">
+          <div class="section-header">
+            <span class="section-icon">👷</span>
+            <h2 class="section-title">RDV Traités</h2>
+            <span class="section-badge" id="badge-hist-rdv">0</span>
+            <span class="section-sub">Suppression auto après 15 jours</span>
+          </div>
+          <div class="cards-list" id="list-hist-rdv">
+            <div class="empty-state" id="empty-hist-rdv">
+              <span class="empty-icon">✅</span>
+              <p>Aucun RDV traité</p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ===== ONGLET ÉQUIPE ===== -->
+      <section id="tab-team" class="tab-content">
+        <div class="team-header">
+          <h2>Mon Équipe</h2>
+          <button class="btn-add-worker" id="btn-add-worker">+ Ajouter</button>
+        </div>
+        <div id="list-workers" class="workers-grid"></div>
+        <div class="empty-state" id="empty-workers" style="display:none;">
+          <span class="empty-icon">👷</span>
+          <p>Aucun travailleur enregistré</p>
+        </div>
+      </section>
+
+      <!-- ===== ONGLET SEMAINE ===== -->
+      <section id="tab-week" class="tab-content">
+        <div class="week-nav">
+          <button id="week-prev" class="week-btn">&#8592;</button>
+          <span id="week-label" class="week-label"></span>
+          <button id="week-next" class="week-btn">&#8594;</button>
+        </div>
+        <div id="week-grid" class="week-grid"></div>
+
+        <!-- Détail jour sélectionné -->
+        <div id="day-detail" class="day-detail hidden">
+          <div class="day-detail-header">
+            <h3 id="day-detail-title"></h3>
+            <button id="day-detail-close" class="btn-icon">✕</button>
+          </div>
+          <div id="day-detail-list"></div>
+        </div>
+      </section>
+
+      <!-- ===== ONGLET PARAMÈTRES ===== -->
+      <section id="tab-settings" class="tab-content">
+        <div class="settings-wrapper">
+
+          <div class="settings-group">
+            <h3 class="settings-group-title">🎨 Thème visuel</h3>
+            <div class="theme-grid" id="theme-grid">
+
+              <button class="theme-btn" data-theme="light">
+                <span class="theme-preview light-prev"></span>
+                <span>☀️ Clair</span>
+              </button>
+              <button class="theme-btn" data-theme="dark">
+                <span class="theme-preview dark-prev"></span>
+                <span>🌙 Sombre</span>
+              </button>
+              <button class="theme-btn" data-theme="nature">
+                <span class="theme-preview nature-prev"></span>
+                <span>🌿 Vert Nature</span>
+              </button>
+              <button class="theme-btn" data-theme="orange">
+                <span class="theme-preview orange-prev"></span>
+                <span>🟠 Orange Terrain</span>
+              </button>
+              <button class="theme-btn" data-theme="neon-green">
+                <span class="theme-preview neon-green-prev"></span>
+                <span>💚 Néon Vert</span>
+              </button>
+              <button class="theme-btn" data-theme="neon-orange">
+                <span class="theme-preview neon-orange-prev"></span>
+                <span>🔶 Néon Orange</span>
+              </button>
+              <button class="theme-btn" data-theme="contrast">
+                <span class="theme-preview contrast-prev"></span>
+                <span>⬛ Contraste Fort</span>
+              </button>
+              <button class="theme-btn" data-theme="paper">
+                <span class="theme-preview paper-prev"></span>
+                <span>✏️ Crayon Papier</span>
+              </button>
+
+            </div>
+          </div>
+
+          <div class="settings-group">
+            <h3 class="settings-group-title">👷 Gestion de l'équipe</h3>
+            <button class="btn-settings-action" id="btn-settings-team">
+              Gérer les travailleurs →
+            </button>
+          </div>
+
+          <div class="settings-group settings-about">
+            <h3 class="settings-group-title">ℹ️ À propos</h3>
+            <div class="about-box">
+              <p class="about-app-name">LAOUPA</p>
+              <p class="about-slogan">Là ou pas là ?</p>
+              <p class="about-version">Version 1.0.0</p>
+              <p class="about-copy">© Copyright LEROY Aurélien 2026</p>
+              <p class="about-copy">Tous droits réservés</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ========== BARRE DE NAVIGATION BAS ========== -->
+    <nav id="bottom-nav">
+      <button class="nav-btn active" data-tab="dashboard">
+        <span class="nav-icon">📋</span>
+        <span class="nav-label">Tableau</span>
+      </button>
+      <button class="nav-btn" data-tab="history">
+        <span class="nav-icon">🗂️</span>
+        <span class="nav-label">Historique</span>
+      </button>
+      <div class="nav-fab-spacer"></div>
+      <button class="nav-btn" data-tab="week">
+        <span class="nav-icon">📅</span>
+        <span class="nav-label">Semaine</span>
+      </button>
+      <button class="nav-btn" data-tab="settings">
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-label">Réglages</span>
+      </button>
+    </nav>
+
+    <!-- ========== BOUTON FAB ========== -->
+    <button id="fab-btn" aria-label="Ajouter">
+      <span id="fab-icon">＋</span>
+    </button>
+
+  </div><!-- fin #app -->
+
+  <!-- ================================================ -->
+  <!-- ================= MODALES ====================== -->
+  <!-- ================================================ -->
+
+  <!-- MODALE FAB — Choix du type -->
+  <div id="modal-fab-choice" class="modal-overlay hidden">
+    <div class="modal-box modal-choice">
+      <h2 class="modal-title">Ajouter</h2>
+      <div class="choice-buttons">
+        <button class="choice-btn choice-event" id="choice-event">
+          <span class="choice-icon">⚡</span>
+          <span>Événement<br/>Professionnel</span>
+        </button>
+        <button class="choice-btn choice-rdv" id="choice-rdv">
+          <span class="choice-icon">👷</span>
+          <span>RDV /<br/>Absence</span>
+        </button>
+      </div>
+      <button class="modal-cancel" id="fab-choice-cancel">Annuler</button>
+    </div>
+  </div>
+
+  <!-- MODALE — Formulaire Événement Pro -->
+  <div id="modal-event" class="modal-overlay hidden">
+    <div class="modal-box">
+      <h2 class="modal-title" id="modal-event-title">⚡ Événement Professionnel</h2>
+      <form id="form-event" novalidate>
+        <input type="hidden" id="event-id" value="" />
+
+        <label class="form-label" for="event-date">Date et heure *</label>
+        <input class="form-input" type="datetime-local" id="event-date" required />
+
+        <label class="form-label" for="event-tag">Tag</label>
+        <select class="form-select" id="event-tag">
+          <option value="">— Aucun —</option>
+          <option value="incident">Incident</option>
+          <option value="observation">Observation</option>
+          <option value="reunion">Réunion</option>
+          <option value="autre">Autre</option>
+        </select>
+
+        <label class="form-label" for="event-desc">Description *</label>
+        <textarea class="form-textarea" id="event-desc" rows="6" placeholder="Décrivez ce qui s'est passé..." required></textarea>
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" id="event-cancel">Annuler</button>
+          <button type="submit" class="btn-submit">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODALE — Formulaire RDV Travailleur -->
+  <div id="modal-rdv" class="modal-overlay hidden">
+    <div class="modal-box">
+      <h2 class="modal-title" id="modal-rdv-title">👷 RDV / Absence</h2>
+      <form id="form-rdv" novalidate>
+        <input type="hidden" id="rdv-id" value="" />
+
+        <label class="form-label" for="rdv-worker">Travailleur *</label>
+        <select class="form-select" id="rdv-worker" required>
+          <option value="">— Sélectionner —</option>
+        </select>
+
+        <label class="form-label" for="rdv-date">Date *</label>
+        <input class="form-input" type="date" id="rdv-date" required />
+
+        <label class="form-label" for="rdv-time">Heure (optionnelle)</label>
+        <input class="form-input" type="time" id="rdv-time" />
+
+        <label class="form-label" for="rdv-motif">Motif *</label>
+        <select class="form-select" id="rdv-motif" required>
+          <option value="">— Sélectionner —</option>
+          <option value="absence-matin">Absence matin</option>
+          <option value="absence-apmidi">Absence après-midi</option>
+          <option value="absence-journee">Absence journée</option>
+          <option value="rdv-soutien">RDV Soutien ESAT</option>
+          <option value="conge">Congé posé</option>
+          <option value="rdv-medical">RDV médical</option>
+          <option value="autre">Autre</option>
+        </select>
+
+        <label class="form-label" for="rdv-note">Note complémentaire</label>
+        <textarea class="form-textarea" id="rdv-note" rows="3" placeholder="Informations complémentaires..."></textarea>
+
+        <label class="form-label" for="rdv-recurrence">Récurrence</label>
+        <select class="form-select" id="rdv-recurrence">
+          <option value="none">Aucune</option>
+          <option value="weekly">Hebdomadaire</option>
+          <option value="bimonthly">Bi-mensuelle</option>
+          <option value="monthly">Mensuelle</option>
+        </select>
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" id="rdv-cancel">Annuler</button>
+          <button type="submit" class="btn-submit">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODALE — Formulaire Travailleur -->
+  <div id="modal-worker" class="modal-overlay hidden">
+    <div class="modal-box">
+      <h2 class="modal-title" id="modal-worker-title">👷 Travailleur</h2>
+      <form id="form-worker" novalidate>
+        <input type="hidden" id="worker-id" value="" />
+
+        <label class="form-label" for="worker-firstname">Prénom *</label>
+        <input class="form-input" type="text" id="worker-firstname" placeholder="Prénom" required />
+
+        <label class="form-label" for="worker-lastname">Nom (facultatif)</label>
+        <input class="form-input" type="text" id="worker-lastname" placeholder="Nom" />
+
+        <label class="form-label">Couleur identifiante</label>
+        <div class="color-picker" id="color-picker"></div>
+
+        <div class="worker-avatar-preview">
+          <div class="avatar-big" id="avatar-preview">?</div>
+          <span>Aperçu</span>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" id="worker-cancel">Annuler</button>
+          <button type="submit" class="btn-submit">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODALE — Fiche travailleur -->
+  <div id="modal-worker-detail" class="modal-overlay hidden">
+    <div class="modal-box modal-worker-detail">
+      <div class="worker-detail-header" id="worker-detail-header"></div>
+      <div class="worker-detail-body" id="worker-detail-body"></div>
+      <div class="form-actions">
+        <button class="btn-cancel" id="worker-detail-close">Fermer</button>
+        <button class="btn-edit" id="worker-detail-edit">✏️ Modifier</button>
+        <button class="btn-danger" id="worker-detail-delete">🗑️ Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALE — Confirmation suppression -->
+  <div id="modal-confirm" class="modal-overlay hidden">
+    <div class="modal-box modal-confirm-box">
+      <p class="confirm-message" id="confirm-message">Confirmer la suppression ?</p>
+      <div class="form-actions">
+        <button class="btn-cancel" id="confirm-cancel">Annuler</button>
+        <button class="btn-danger" id="confirm-ok">Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
