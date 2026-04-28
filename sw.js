@@ -3,15 +3,15 @@
    Copyright LEROY Aurélien 2026 — Tous droits réservés
    ============================================================ */
 
-const CACHE_NAME = 'laoupa-v1';
+const CACHE_NAME = 'laoupa-v1.0.0';
 const ASSETS = [
   './',
   './index.html',
   './style.css',
   './app.js',
   './manifest.json',
-  './icons/icon-192.png',
-  './icons/icon-512.png'
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 self.addEventListener('install', (e) => {
